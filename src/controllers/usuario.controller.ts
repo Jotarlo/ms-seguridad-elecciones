@@ -14,14 +14,16 @@ import {
 } from '@loopback/rest';
 import {CredencialesLogin, Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
-import {SeguridadUsuarioService} from '../services';
+import {JwtService, SeguridadUsuarioService} from '../services';
 
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
     public usuarioRepository: UsuarioRepository,
     @service(SeguridadUsuarioService)
-    private servicioSeguridad: SeguridadUsuarioService
+    private servicioSeguridad: SeguridadUsuarioService,
+    @service(JwtService)
+    private servicioJWT: JwtService
   ) { }
 
   @post('/usuarios')
@@ -177,5 +179,22 @@ export class UsuarioController {
     }
   }
 
+
+
+  @get('/validate-token/{jwt}')
+  @response(200, {
+    description: 'Validar un token JWT',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(Object),
+      },
+    },
+  })
+  async validateJWT(
+    @param.path.string('jwt') jwt: string
+  ): Promise<string> {
+    let valido = this.servicioJWT.ValidarToken(jwt);
+    return valido;
+  }
 
 }

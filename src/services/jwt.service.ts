@@ -20,4 +20,19 @@ export class JwtService {
     }
   }
 
+  /**
+   * Se valida un token si es correcto o no
+   * @param tk token a validar
+   * @returns boolean con la respuesta
+   */
+  ValidarToken(tk: string): string {
+    try {
+      let info = jwt.verify(tk, Keys.JwtSecretKey);
+      console.log(info.rol);
+      return info.rol;
+    } catch (err) {
+      return "";
+    }
+  }
+
 }

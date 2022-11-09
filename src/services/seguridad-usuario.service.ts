@@ -24,30 +24,42 @@ export class SeguridadUsuarioService {
    * @param credenciales credenciales de acceso
    * @returns una cadena con el token cuando todo está bien, o una cadena vacía cuando no coinciden las credenciales
    */
-  async IdentificarUsuario(credenciales: CredencialesLogin): Promise<string> {
-    let respuesta = "";
-
+  async IdentificarUsuario(credenciales: CredencialesLogin): Promise<object> {
+    let respuesta = {
+      token: "",
+      user: {
+        nombre: "",
+        correo: "",
+        rol: ""
+      }
+    };
+    console.log("Hola mundo " + credenciales.nombreUsuario + " - " + credenciales.clave)
     let usuario = await this.usuarioRepository.findOne({
       where: {
         correo: credenciales.nombreUsuario,
         clave: credenciales.clave
       }
     });
+    console.log(usuario)
 
     if (usuario) {
+      console.log(usuario)
       let datos = {
         nombre: `${usuario.nombres} ${usuario.apellidos}`,
         correo: usuario.correo,
         rol: usuario.rolId
       }
       try {
-        respuesta = this.servicioJwt.CrearToken(datos);
+        let tk = this.servicioJwt.CrearToken(datos);
+        respuesta.token = tk;
+        respuesta.user = datos;
+        console.log("respuesta: " + respuesta);
         console.log(respuesta);
       } catch (err) {
         throw err;
       }
     }
-
+    console.log(respuesta)
     return respuesta;
   }
 

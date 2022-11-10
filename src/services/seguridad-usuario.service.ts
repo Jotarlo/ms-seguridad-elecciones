@@ -28,9 +28,10 @@ export class SeguridadUsuarioService {
     let respuesta = {
       token: "",
       user: {
-        nombre: "",
-        correo: "",
-        rol: ""
+        name: "",
+        email: "",
+        role: "",
+        id: ""
       }
     };
     console.log("Hola mundo " + credenciales.nombreUsuario + " - " + credenciales.clave)
@@ -45,9 +46,10 @@ export class SeguridadUsuarioService {
     if (usuario) {
       console.log(usuario)
       let datos = {
-        nombre: `${usuario.nombres} ${usuario.apellidos}`,
-        correo: usuario.correo,
-        rol: usuario.rolId
+        name: `${usuario.nombres} ${usuario.apellidos}`,
+        email: usuario.correo,
+        role: usuario.rolId,
+        id: usuario._id ? usuario._id : ""
       }
       try {
         let tk = this.servicioJwt.CrearToken(datos);

@@ -28,8 +28,8 @@ export class JwtService {
   ValidarToken(tk: string): string {
     try {
       let info = jwt.verify(tk, Keys.JwtSecretKey);
-      console.log(info.rol);
-      return info.rol;
+      console.log(info.role);
+      return info.role;
     } catch (err) {
       return "";
     }

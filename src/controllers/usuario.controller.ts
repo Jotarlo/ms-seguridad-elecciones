@@ -216,7 +216,24 @@ export class UsuarioController {
     @param.path.string('jwt') jwt: string
   ): Promise<string> {
     let valido = this.servicioJWT.ValidarToken(jwt);
+    console.log("Rol: " + valido)
     return valido;
+  }
+
+  @get('/check-session-token/{jwt}')
+  @response(200, {
+    description: 'Validar un token JWT',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(Object),
+      },
+    },
+  })
+  async checkSessionJWT(
+    @param.path.string('jwt') jwt: string
+  ): Promise<boolean> {
+    let roleId = await this.servicioJWT.ValidarToken(jwt);
+    return roleId != "";
   }
 
 }
